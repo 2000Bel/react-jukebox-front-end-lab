@@ -1,20 +1,15 @@
-// src/App.jsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import TrackForm from "./components/TrackForm";
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import TrackForm from './components/TrackForm';
-
-const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/add-track" element={<TrackForm />} />
-        <Route path="/edit-track/:trackId" element={<TrackForm />} />
-      </Routes>
-    </Router>
-  );
-};
+const App = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/track-form" element={<TrackForm />} />
+    </Routes>
+  </Router>
+);
 
 export default App;
