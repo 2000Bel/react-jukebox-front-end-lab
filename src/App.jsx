@@ -1,10 +1,20 @@
 // src/App.jsx
-require ('dotenv').config();
-const apiKey
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import TrackForm from './components/TrackForm';
 
 const App = () => {
-  return <h1>Hello world!</h1>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/add-track" element={<TrackForm />} />
+        <Route path="/edit-track/:trackId" element={<TrackForm />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;
-
