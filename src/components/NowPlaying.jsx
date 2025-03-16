@@ -2,12 +2,12 @@
 import React from 'react';
 
 const NowPlaying = ({ track }) => {
+  if (!track) return null;
   return (
     <div>
       <h3>Now Playing</h3>
-      <p>
-        {track.title} - {track.artist}
-      </p>
+      <p>Title: {track.title}</p>
+      <p>Artist: {track.artist}</p>
     </div>
   );
 };

@@ -1,55 +1,52 @@
 // src/components/TrackForm.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import * as trackService from '../services/trackService';
 
 const TrackForm = () => {
-  const [track, setTrack] = useState({ title: '', artist: '' });
-  const navigate = useNavigate();
+  const [title, setTitle] = useState('');
+  const [artist, setArtist] = useState('');
   const { trackId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (trackId) {
-      fetch(`${import.meta.env.VITE_BACK_END_SERVER_URL}/tracks/${trackId}`)
-        .then((res) => res.json())
-        .then((data) => setTrack(data))
-        .catch((err) => console.error(err));
+      trackService.getTrack(trackId).then((track) => {
+        setTitle(track.title);
+        setArtist(track.artist);
+      });
     }
   }, [trackId]);
 
-  const handleChange = (e) => {
-    setTrack({ ...track, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const method = trackId ? 'PUT' : 'POST';
-    const url = trackId
-      ? `${import.meta.env.VITE_BACK_END_SERVER_URL}/tracks/${trackId}`
-      : `${import.meta.env.VITE_BACK_END_SERVER_URL}/tracks`;
-
-    fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(track),
-    })
-      .then(() => navigate('/'))
-      .catch((err) => console.error(err));
+    const track = { title, artist };
+    if (trackId) {
+      await trackService.updateTrack(trackId, track);
+    } else {
+      await trackService.addTrack(track);
+    }
+    navigate('/');
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>{trackId ? 'Edit Track' : 'Add New Track'}</h2>
-      <label>
-        Title:
-        <input name="title" value={track.title} onChange={handleChange} required />
-      </label>
-      <br />
-      <label>
-        Artist:
-        <input name="artist" value={track.artist} onChange={handleChange} required />
-      </label>
-      <br />
-      <button type="submit">Save</button>
+      <input
+        type="text"
+        placeholder="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Artist"
+        value={artist}
+        onChange={(e) => setArtist(e.target.value)}
+        required
+      />
+      <button type="submit">{trackId ? 'Save Changes' : 'Add Track'}</button>
     </form>
   );
 };
