@@ -1,53 +1,50 @@
 // src/components/TrackForm.jsx
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import * as trackService from '../services/trackService';
+import { useState, } from 'react';
 
-const TrackForm = () => {
-  const [title, setTitle] = useState('');
-  const [artist, setArtist] = useState('');
-  const { trackId } = useParams();
-  const navigate = useNavigate();
+const TrackForm = (props) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    artist: '',
+  }
+  const [formData, setFormData] = useState(props.selected ? props.selected : initialState)
+);
 
-  useEffect(() => {
-    if (trackId) {
-      trackService.getTrack(trackId).then((track) => {
-        setTitle(track.title);
-        setArtist(track.artist);
-      });
-    }
-  }, [trackId]);
+  const handleChange = (evt) => {
+    setFormData({ ...formData, [evt.target.title]: evt.target.value });
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const track = { title, artist };
-    if (trackId) {
-      await trackService.updateTrack(trackId, track);
-    } else {
-      await trackService.addTrack(track);
-    }
-    navigate('/');
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    if (props.selected) {
+    props.handleAddTrack(formData, props.selected._id);
+  } else {
+    props.handleAddTrack(formData);
+  }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>{trackId ? 'Edit Track' : 'Add New Track'}</h2>
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Artist"
-        value={artist}
-        onChange={(e) => setArtist(e.target.value)}
-        required
-      />
-      <button type="submit">{trackId ? 'Save Changes' : 'Add Track'}</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="title"> title </label>
+        <input
+          id="title"
+          title="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor="artist"> artist </label>
+        <input
+          id="artist"
+          title="artist"
+          value={formData.artist}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">
+           {props.selected ? 'Update Track' : 'Add New Track'}</button>
+      </form>
+    </div>
   );
 };
 

@@ -1,19 +1,33 @@
 // src/components/TrackList.jsx
+importTrackDetail from './components/TrackDetail';
+
 const TrackList = ({ track = [] }) => {
-    return (
-      <div>
-        {track.length === 0 ? (
-          <p>No tracks available. Please add some!</p>
-        ) : (
-            track.map((track) => (
-            <div key={track._id} className="track-item">
-              <h3>{track.title}</h3>
-              <p>Artist: {track.artist}</p>
-            </div>
-          ))
-        )}
-      </div>
-    );
-  };
+return (
+  <div>
+    <h1>track List</h1>
+    <div>
+      {!props.tracks.length ? (
+        <h2>No tracks Yet!</h2>
+      ) : (
+        <ul>
+          {props.tracks.map((track) => 
+            <li 
+              key={track._id}
+              style={{ cursor: 'pointer', color: "#646CFF" }}
+              onClick={() => props.handleSelect(track)}
+            >
+              {track._id}
+            </li>
+          )}
+        </ul>
+      )}
+    </div>
+    {/* Our new button! */}
+    <button onClick={props.handleFormView}>
+      {props.isFormOpen ? 'Close Form' : 'New track'}
+    </button>
+  </div>
+);
+
   
   export default TrackList;
