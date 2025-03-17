@@ -1,26 +1,13 @@
 // src/components/NowPlaying.jsx
 import React from 'react';
 
-const NowPlaying = (props) => {
-  console.log(props);
+const NowPlaying = ({ selected }) => {
+  if (!selected) return <p>No song playing</p>;
+
   return (
     <div>
       <h2>Now Playing</h2>
-      {!props.tracks.length ? (
-        <p>No tracks available</p>
-      ) : (
-        <ul>
-          {props.tracks.map((track) => (
-            <li
-              key={track._id}
-              style={{ cursor: 'pointer', color: "#646CFF" }}
-              onClick={() => props.handlePlay(track)}
-            >
-              {track.artist}
-            </li>
-          ))}
-        </ul>
-      )}
+      <h3>{selected.title} - {selected.artist}</h3>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+//src/App.jsx
 import { useState, useEffect } from 'react';
 import * as trackService from './services/trackService';
 import TrackList from './components/TrackList';
@@ -36,13 +37,25 @@ const App = () => {
       track._id === trackId ? updatedTrack : track
     );
     setTracks(updatedTracks);
-    setSelected(updatedTrack);
+    setSelected(null);
     setIsFormOpen(false);
   };
 
   const handleFormView = () => {
     setSelected(null);
     setIsFormOpen(!isFormOpen);
+  };
+
+  const handleEditTrack = (track=null) => {
+    setSelected(track);
+    setIsFormOpen(true);
+  };
+
+  const handleDeleteTrack = async (trackId) => {
+    await trackService.deleteTrack(trackId);
+    const updatedTracks = tracks.filter((track) => track._id !== trackId);
+    setTracks(updatedTracks);
+    setSelected(null); 
   };
 
   return (
@@ -65,9 +78,11 @@ const App = () => {
         <TrackDetails
           selected={selected}
           handleFormView={handleFormView}
+          handleDeleteTrack={handleDeleteTrack}
+          handleEditTrack={handleEditTrack}
         />
       )}
-      <NowPlaying tracks={tracks} handlePlay={handlePlay} />
+      <NowPlaying selected={selected} handlePlay={handlePlay} />
     </div>
   );
 };

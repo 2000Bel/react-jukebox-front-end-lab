@@ -1,4 +1,4 @@
-// src/components/Tracks.jsx
+// src/components/TrackDetails.jsx
 import React from 'react';
 
 const TrackDetails = (props) => {
@@ -15,7 +15,7 @@ const TrackDetails = (props) => {
       <h1>{props.selected.title}</h1>
       <h2>Artist: {props.selected.artist}</h2>
       <div>
-        <button onClick={() => props.handleFormView(props.selected)}>
+        <button onClick={() => props.handleEditTrack(props.selected)}>
           Edit Track
         </button>
         <button onClick={() => props.handleDeleteTrack(props.selected._id)}>
