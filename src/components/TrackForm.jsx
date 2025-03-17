@@ -1,48 +1,45 @@
 // src/components/TrackForm.jsx
-import { useState, } from 'react';
+import { useState } from 'react';
 
 const TrackForm = (props) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    artist: '',
-  }
-  const [formData, setFormData] = useState(props.selected ? props.selected : initialState)
-);
+  const initialState = props.selected ? props.selected : { title: '', artist: '' };
+  const [formData, setFormData] = useState(initialState);
 
   const handleChange = (evt) => {
-    setFormData({ ...formData, [evt.target.title]: evt.target.value });
+    setFormData({ ...formData, [evt.target.name]: evt.target.value });
   };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (props.selected) {
-    props.handleAddTrack(formData, props.selected._id);
-  } else {
-    props.handleAddTrack(formData);
-  }
+      props.handleUpdateTrack(formData, props.selected._id);
+    } else {
+      props.handleAddTrack(formData);
+    }
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="title"> title </label>
+        <label htmlFor="title">Title</label>
         <input
           id="title"
-          title="title"
+          name="title"
           value={formData.title}
           onChange={handleChange}
           required
         />
-        <label htmlFor="artist"> artist </label>
+        <label htmlFor="artist">Artist</label>
         <input
           id="artist"
-          title="artist"
+          name="artist"
           value={formData.artist}
           onChange={handleChange}
           required
         />
         <button type="submit">
-           {props.selected ? 'Update Track' : 'Add New Track'}</button>
+          {props.selected ? 'Update Track' : 'Add New Track'}
+        </button>
       </form>
     </div>
   );
